@@ -20,7 +20,7 @@ class PostResource extends JsonResource
             'group' => $this['group_id'] ? $this->group->name : null,
             'content' => $this['content'],
             'numberOfLikes' => $this->likes()->count(),
-            // todo: when create comments => number of comments
+            'numberOfComments' => $this->comments()->count(),
             'created_at' => $this['created_at'],
         ];
     }

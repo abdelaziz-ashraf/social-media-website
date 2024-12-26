@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Post;
+namespace App\Http\Resources\Comment;
 
-use App\Http\Resources\Comment\CommentResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostDetailsResource extends JsonResource
+class CommentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +17,9 @@ class PostDetailsResource extends JsonResource
         return [
             'id' => $this['id'],
             'user' => $this->user->name,
-            'group' => $this['group_id'] ? $this->group->name : null,
+            'username' => $this->user->username,
             'content' => $this['content'],
-            'numberOfLikes' => $this->likes()->count(),
-            'numberOfComments' => $this->comments()->count(),
-            'comments' => CommentResource::collection($this->comments),
+            'children' => CommentResource::collection($this->childern),
             'created_at' => $this['created_at'],
         ];
     }
