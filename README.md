@@ -18,24 +18,14 @@ The list of **API features** that can be implemented. The features include **use
 
 ### **2. Post Management APIs**
 
-- **Create Post**
-    - `POST /api/posts`: with content (CKEditor).
-
-- **Get All Posts (Home Feed)**
-    - `GET /api/posts`
-    - Load posts from groups the user is a member of or from users the user is following.
-    - **Pagination & Caching**: Cache the posts.
-
-- **Update Post**
-    - `PUT /api/posts/{post_id}`: Only the post owner or group admin can update posts.
-
-- **Delete Post**
-    - `DELETE /api/posts/{post_id}`: Only the owner or group admin can delete it.
-    - **Notifications**: Notify the owner when a post is deleted by the admin.
-
-- **Like/Unlike Post**
-    - `POST /api/posts/{post_id}/like`: Trigger email notifications.
-    - `DELETE /api/posts/{post_id}/unlike`
+- |x| Create Post
+- |x| Get All Posts (Home Feed): from users the user is following.
+    - todo: load from groups the user is a member of.
+    - todo: Cache the posts.
+- |x| Update Post.
+- |x| Delete Post
+    - todo: group admin can delete it (Notify the owner when a post is deleted by the admin).
+- |x| Like/Unlike Post
 
 - **Post Attachments**
     - `POST /api/posts/{post_id}/attachments`

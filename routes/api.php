@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\User\AuthController;
+use App\Http\Controllers\Api\User\PostController;
 use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('users/{userToFollow}/follow', [UserController::class, 'follow']);
     Route::post('users/{userToUnfollow}/unfollow', [UserController::class, 'unfollow']);
+
+    Route::prefix('posts')->group(function () {
+       Route::get('/feed', [PostController::class, 'index']);
+       Route::get('{post}', [PostController::class, 'show']);
+       Route::post('/', [PostController::class, 'store']);
+       Route::put('{post}', [PostController::class, 'update']);
+       Route::delete('{post}', [PostController::class, 'destroy']);
+       Route::put('{post}/like', [PostController::class, 'toggleLike']);
+    });
+
 });
