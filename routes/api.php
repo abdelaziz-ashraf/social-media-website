@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\GroupController;
-use App\Http\Controllers\Api\User\AuthController;
-use App\Http\Controllers\Api\User\PostController;
-use App\Http\Controllers\Api\User\UserController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -50,5 +51,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('{group}/approve/{user}', [GroupController::class, 'approveRequest']);
         Route::post('{group}/reject/{user}', [GroupController::class, 'rejectRequest']);
         Route::put('{group}/update-admin-role/{userId}', [GroupController::class, 'updateAdminRole']);
+    });
+
+    Route::prefix('search')->group(function () {
+        Route::get('tags/{tag}', [SearchController::class, 'tagSearch']);
     });
 });

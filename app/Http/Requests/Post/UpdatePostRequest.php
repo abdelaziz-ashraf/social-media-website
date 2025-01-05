@@ -35,6 +35,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'content' => 'string',
+            'tags' => 'nullable|array'
         ];
     }
 }

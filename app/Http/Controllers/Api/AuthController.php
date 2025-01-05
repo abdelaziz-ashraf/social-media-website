@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api;
 
 use App\Actions\User\GenerateUniqueUsername;
 use App\Actions\User\GenerateVerificationCode;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\Auth\UserRegisterRequest;
 use App\Http\Requests\User\Auth\UserLoginRequest;
+use App\Http\Requests\User\Auth\UserRegisterRequest;
 use App\Http\Requests\User\Auth\VerifyEmailRequest;
 use App\Http\Resources\User\Auth\LoggedUserResource;
 use App\Http\Resources\User\Auth\RegisteredUserResource;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api;
 
 use App\Actions\User\GenerateUniqueUsername;
 use App\Http\Controllers\Controller;
@@ -9,7 +9,6 @@ use App\Http\Resources\User\Info\UserFollowersResource;
 use App\Http\Resources\User\Info\UserFollowingsResource;
 use App\Http\Resources\User\Info\UserProfileResource;
 use App\Http\Responses\SuccessResponse;
-use App\Models\Follow;
 use App\Models\User;
 use App\Notifications\NewFollowerNotification;
 use Illuminate\Support\Facades\Hash;

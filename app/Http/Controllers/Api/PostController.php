@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StorePostRequest;
@@ -10,9 +10,10 @@ use App\Http\Resources\Post\PostResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\GroupUser;
 use App\Models\Post;
+use App\Models\PostTag;
+use App\Models\Tag;
 use App\Notifications\GroupAdminDeletedYourPostNotification;
 use App\Notifications\LikePostNotification;
-use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 
 class PostController extends Controller
@@ -45,20 +46,36 @@ class PostController extends Controller
     }
     public function store(StorePostRequest $request) {
         $data = $request->validated();
-        $post = post::create([
+        $post = Post::create([
             'user_id' => auth()->id(),
             'group_id' => $data['group_id'] ?? null,
             'content' => $data['content'],
         ]);
+
+        foreach ($data['tags'] as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            PostTag::firstOrCreate([
+               'post_id' => $post->id,
+               'tag_id' => $tag->id,
+            ]);
+        }
+
         return SuccessResponse::send('Post created successfully!', PostDetailsResource::make($post));
     }
     public function show(Post $post) {
         return SuccessResponse::send('Post retrieved successfully!', PostDetailsResource::make($post));
     }
     public function update(UpdatePostRequest $request, Post $post) {
+        $data = $request->validated();
         $post->update([
-            'content' => $request->get('content')
+            'content' => $data['content']
         ]);
+        foreach ($data['tags'] as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            PostTag::firstOrCreate([
+                'post_id' => $post->id,
+                'tag_id' => $tag->id,
+            ]);        }
         return SuccessResponse::send('Post updated successfully!', PostDetailsResource::make($post));
     }
     public function destroy(Post $post) {

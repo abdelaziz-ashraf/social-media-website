@@ -20,6 +20,7 @@ class PostDetailsResource extends JsonResource
             'user' => $this->user->name,
             'group' => $this['group_id'] ? $this->group->name : null,
             'content' => $this['content'],
+            'tags' => TagResource::collection($this->tags()->with('tag')->get()),
             'numberOfLikes' => $this->likes()->count(),
             'numberOfComments' => $this->comments()->count(),
             'comments' => CommentResource::collection($this->comments),

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\User\Info;
+namespace App\Http\Resources\Post;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserFollowingsResource extends JsonResource
+class TagResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +16,9 @@ class UserFollowingsResource extends JsonResource
     {
         return [
             'id' => $this['id'],
-            'name' => $this['name'],
-            'username' => $this['username'],
-            'created_at' => $this['created_at'],
+            "post_id" => $this['post_id'],
+            "tag_id" => $this['tag_id'],
+            "name" => $this['tag']['name'],
         ];
     }
 }
