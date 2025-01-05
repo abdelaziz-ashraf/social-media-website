@@ -33,6 +33,9 @@ class PostController extends Controller
                 $subQuery->whereIn('user_id', $followerIds)
                     ->whereNotIn('group_id', $userGroupIds);
             });
+        })->when(request('filter') === 'popular', function ($query) {
+            $query->orderBy('number_of_likes', 'desc')
+                ->orderBy('number_of_comments', 'desc');
         })->paginate();
 
         return SuccessResponse::send('Posts retrieved successfully.', PostResource::collection($posts), meta: [

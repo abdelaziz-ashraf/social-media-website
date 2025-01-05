@@ -19,8 +19,8 @@ class PostResource extends JsonResource
             'user' => $this->user->name,
             'group' => $this['group_id'] ? $this->group->name : null,
             'content' => $this['content'],
-            'numberOfLikes' => $this->likes()->count(),
-            'numberOfComments' => $this->comments()->count(),
+            'numberOfLikes' => $this['number_of_likes'],
+            'numberOfComments' => $this['number_of_comments'],
             'created_at' => $this['created_at'],
         ];
     }
