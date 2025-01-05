@@ -24,4 +24,17 @@ class SearchController extends Controller
             ]
         ]);
     }
+
+    public function fullTextSearch ($text) {
+        $posts = Post::search($text)->paginate();
+        return SuccessResponse::send("Posts search about {$text}.", PostResource::collection($posts), meta: [
+            'pagination' => [
+                'total' => $posts->total(),
+                'current_page' => $posts->currentPage(),
+                'per_page' => $posts->perPage(),
+                'last_page' => $posts->lastPage(),
+            ]
+        ]);
+
+    }
 }
