@@ -8,7 +8,9 @@ use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostDetailsResource;
 use App\Http\Resources\Post\PostResource;
 use App\Http\Responses\SuccessResponse;
+use App\Models\GroupUser;
 use App\Models\Post;
+use App\Notifications\GroupAdminDeletedYourPostNotification;
 use App\Notifications\LikePostNotification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
@@ -16,11 +18,22 @@ use Illuminate\Validation\UnauthorizedException;
 class PostController extends Controller
 {
     public function index() {
-        $followingIds = auth()->user()->followings()->pluck('following_id');
-        $posts = Post::whereIn('user_id', $followingIds)
-            ->latest()
-            ->paginate();
-        // todo: when create groups => get posts from my groups too
+
+        $userId = auth()->id();
+        $userGroupIds = GroupUser::where('user_id', $userId)
+            ->pluck('group_id')->toArray();
+
+        $followerIds = auth()->user()->followers()->pluck('id')->toArray();
+
+        $posts = Post::where(function ($query) use ($userGroupIds, $followerIds) {
+            $query->whereIn('group_id', $userGroupIds);
+
+            $query->orWhere(function ($subQuery) use ($followerIds, $userGroupIds) {
+                $subQuery->whereIn('user_id', $followerIds)
+                    ->whereNotIn('group_id', $userGroupIds);
+            });
+        })->get();
+
         return SuccessResponse::send('Posts retrieved successfully.', PostResource::collection($posts), meta: [
             'pagination' => [
                 'total' => $posts->total(),
@@ -34,7 +47,7 @@ class PostController extends Controller
         $data = $request->validated();
         $post = post::create([
             'user_id' => auth()->id(),
-            'group_id' => null,
+            'group_id' => $data['group_id'] ?? null,
             'content' => $data['content'],
         ]);
         return SuccessResponse::send('Post created successfully!', PostDetailsResource::make($post));
@@ -49,11 +62,19 @@ class PostController extends Controller
         return SuccessResponse::send('Post updated successfully!', PostDetailsResource::make($post));
     }
     public function destroy(Post $post) {
-        // todo: when create group: admin can delete posts (Notify the owner when a post is deleted by the admin)
-        if($post->user_id != auth()->id()) {
+        $groupAdmin = null;
+        if((!is_null($post->group_id))) {
+            $groupAdmin = GroupUser::where('group_id', $post->group_id)
+                ->whereIn('role', ['owner', 'admin'])->first()->user;
+        }
+
+        if($post->user_id != auth()->id() && $groupAdmin->id != auth()->id()) {
             throw new UnauthorizedException;
         }
         $post->delete();
+        if($post->user_id != auth()->id() && $groupAdmin->id == auth()->id()) {
+            auth()->user()->notify(new GroupAdminDeletedYourPostNotification($post->group->name));
+        }
         return SuccessResponse::send('Post deleted successfully!');
     }
     public function toggleLike(Post $post) {
