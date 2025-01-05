@@ -23,7 +23,7 @@ class PostController extends Controller
         $userGroupIds = GroupUser::where('user_id', $userId)
             ->pluck('group_id')->toArray();
 
-        $followerIds = auth()->user()->followers()->pluck('id')->toArray();
+        $followerIds = auth()->user()->followers()->pluck('users.id')->toArray();
 
         $posts = Post::where(function ($query) use ($userGroupIds, $followerIds) {
             $query->whereIn('group_id', $userGroupIds);
@@ -32,7 +32,7 @@ class PostController extends Controller
                 $subQuery->whereIn('user_id', $followerIds)
                     ->whereNotIn('group_id', $userGroupIds);
             });
-        })->get();
+        })->paginate();
 
         return SuccessResponse::send('Posts retrieved successfully.', PostResource::collection($posts), meta: [
             'pagination' => [
