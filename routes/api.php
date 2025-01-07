@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -15,18 +15,21 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::put('users/profile', [ProfileController::class, 'update']);
     Route::prefix('users/{user}')->group(function () {
-        Route::get('profile', [UserController::class, 'show']);
-        Route::put('profile', [UserController::class, 'update']);
-        Route::get('followers', [UserController::class, 'followers']);
-        Route::get('followings', [UserController::class, 'followings']);
+        Route::get('profile', [ProfileController::class, 'profile']);
+        Route::get('followers', [ProfileController::class, 'followers']);
+        Route::get('followings', [ProfileController::class, 'followings']);
     });
 
-    Route::post('users/{userToFollow}/follow', [UserController::class, 'follow']);
-    Route::post('users/{userToUnfollow}/unfollow', [UserController::class, 'unfollow']);
+    Route::post('users/{userToFollow}/follow', [ProfileController::class, 'follow']);
+    Route::post('users/{userToUnfollow}/unfollow', [ProfileController::class, 'unfollow']);
+
+    Route::prefix('home')->group(function () {
+        Route::get('/feed', [\App\Http\Controllers\Api\HomeController::class, 'feed']);
+    });
 
     Route::prefix('posts')->group(function () {
-       Route::get('/feed', [PostController::class, 'index']);
        Route::get('{post}', [PostController::class, 'show']);
        Route::post('/', [PostController::class, 'store']);
        Route::put('{post}', [PostController::class, 'update']);

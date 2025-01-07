@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Group;
 
-use App\Models\GroupUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,9 +15,9 @@ class GroupUsersResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->user->id ?? $this->id,
-            'name' => $this->user->name ?? $this->name,
-            'role' => $this->role ?? ' '
+            'id' => (integer) $this->user_id,
+            'name' => $this->user->name,
+            'role' => $this->role
         ];
     }
 }

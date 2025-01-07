@@ -23,7 +23,7 @@ class StoreCommentRequest extends FormRequest
     {
         return [
             'content' => 'required|string',
-            'parent_id' => 'nullable|exists:comments,id',
+            'parent_id' => 'integer|exists:comments,id',
         ];
     }
 }

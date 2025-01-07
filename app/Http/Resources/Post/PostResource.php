@@ -15,12 +15,12 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this['id'],
+            'id' => (integer) $this['id'],
             'user' => $this->user->name,
             'group' => $this['group_id'] ? $this->group->name : null,
             'content' => $this['content'],
-            'numberOfLikes' => $this['number_of_likes'],
-            'numberOfComments' => $this['number_of_comments'],
+            'numberOfLikes' => (integer) $this['number_of_likes'],
+            'numberOfComments' => (integer) $this['number_of_comments'],
             'created_at' => $this['created_at'],
         ];
     }

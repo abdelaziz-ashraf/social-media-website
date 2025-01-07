@@ -15,7 +15,7 @@ class LoggedUserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this['id'],
+            'id' => (integer) $this['id'],
             'name' => $this['name'],
             'username' => $this['username'],
             'email' => $this['email'],

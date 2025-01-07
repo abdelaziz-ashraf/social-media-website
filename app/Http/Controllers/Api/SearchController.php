@@ -35,6 +35,5 @@ class SearchController extends Controller
                 'last_page' => $posts->lastPage(),
             ]
         ]);
-
     }
 }

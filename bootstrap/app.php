@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Responses\ErrorResponse;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -39,6 +40,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->renderable(function (\Illuminate\Validation\UnauthorizedException $e, $request) {
             if ($request->is('api/*')) {
                 return ErrorResponse::send('Unauthorized', ['Unauthorized Exception'], statusCode: 401);
+            }
+        });
+
+        $exceptions->renderable(function (UniqueConstraintViolationException $e, $request) {
+            if ($request->is('api/*')) {
+                return ErrorResponse::send('already joined before', ['UniqueConstraintViolationException'], statusCode: 401);
             }
         });
     })->create();

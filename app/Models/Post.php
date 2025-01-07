@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, SoftDeletes;
 
     protected $fillable = ['content', 'user_id', 'group_id', 'number_of_likes', 'number_of_comments'];
 

@@ -11,43 +11,33 @@ use App\Http\Resources\User\Info\UserProfileResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\User;
 use App\Notifications\NewFollowerNotification;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
-    public function show(User $user) {
+    protected $userService;
+    public function __construct(UserService $userService) {
+        $this->userService = $userService;
+    }
+
+    public function profile(User $user) {
         return SuccessResponse::send('User Profile', UserProfileResource::make($user));
     }
 
-    public function update(UpdateProfileRequest $request, User $user, GenerateUniqueUsername $username) {
-        $data = $request->validated();
-        if(isset($data['password'])) {
-            $data['password'] = HASH::make($data['password']);
-        }
-        if(isset($data['name'])) {
-            $data['username'] = $username($data['name']);
-        }
-        $user->update($data);
+    public function update(UpdateProfileRequest $request, GenerateUniqueUsername $generateUniqueUsername) {
+        $user = $this->userService->update($request->validated(), $generateUniqueUsername);
         return SuccessResponse::send('User Profile Updated', UserProfileResource::make($user));
     }
 
     public function follow(User $userToFollow) {
-        $user = auth()->user();
-        if($user->followings()->where('following_id', $userToFollow->id)->exists()) {
-            throw ValidationException::withMessages(['Already Followed!']);
-        }
-        $user->followings()->attach($userToFollow);
-        $userToFollow->notify(new NewFollowerNotification($user->name, $user->username));
+        $this->userService->followUser($userToFollow);
         return SuccessResponse::send('User Followed Successfully');
     }
 
     public function unfollow(User $userToUnfollow) {
-        $user = auth()->user();
-        if(!$user->followings()->where('following_id', $userToUnfollow->id)->exists()) {
-            throw ValidationException::withMessages(['Already Unfollowed!']);
-        }
-        $user->followings()->detach($userToUnfollow);
+        $this->userService->unfollowUser($userToUnfollow);
         return SuccessResponse::send('User Unfollowed Successfully');
     }
 

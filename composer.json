@@ -6,11 +6,13 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
+        "guzzlehttp/guzzle": "*",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.11",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "openai-php/laravel": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -19,8 +21,10 @@
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
+        "nunomaduro/larastan": "^3.0",
         "pestphp/pest": "^3.7",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {

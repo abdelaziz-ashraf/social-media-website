@@ -16,13 +16,13 @@ class PostDetailsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this['id'],
+            'id' => (integer) $this['id'],
             'user' => $this->user->name,
             'group' => $this['group_id'] ? $this->group->name : null,
             'content' => $this['content'],
             'tags' => TagResource::collection($this->tags()->with('tag')->get()),
-            'numberOfLikes' => $this->likes()->count(),
-            'numberOfComments' => $this->comments()->count(),
+            'numberOfLikes' => (integer) $this->likes()->count(),
+            'numberOfComments' => (integer) $this->comments()->count(),
             'comments' => CommentResource::collection($this->comments),
             'created_at' => $this['created_at'],
         ];

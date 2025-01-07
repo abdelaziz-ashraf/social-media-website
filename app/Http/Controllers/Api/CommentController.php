@@ -10,16 +10,18 @@ use App\Http\Resources\Post\PostDetailsResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\Comment;
 use App\Models\Post;
-use Illuminate\Validation\UnauthorizedException;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
+    protected $commentService;
+    public function __construct(CommentService $commentService) {
+        $this->commentService = $commentService;
+    }
+
     public function store(StoreCommentRequest $request, Post $post) {
-        $post->comments()->create([
-            'user_id' => auth()->id(),
-            'content' => $request->validated()['content'],
-            'parent_id' => $request->validated()['parent_id'] ?? null,
-        ]);
+        $data = $request->validated();
+        $this->commentService->createComment($post, $data['content'], $data['parent_id'] ?? null);
         return SuccessResponse::send('Comment added', PostDetailsResource::make($post));
     }
 
@@ -29,10 +31,7 @@ class CommentController extends Controller
     }
 
     public function destroy (Comment $comment) {
-        if($comment->user_id != auth()->id()) {
-            throw new UnauthorizedException;
-        }
-        $comment->delete();
+       $this->commentService->deleteComment($comment);
         return SuccessResponse::send('Comment deleted');
     }
 }
