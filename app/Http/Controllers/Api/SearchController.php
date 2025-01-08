@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Post\PostResource;
+use App\Http\Resources\UsersListResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Tag;
+use App\Models\User;
 
 class SearchController extends Controller
 {
@@ -33,6 +35,18 @@ class SearchController extends Controller
                 'current_page' => $posts->currentPage(),
                 'per_page' => $posts->perPage(),
                 'last_page' => $posts->lastPage(),
+            ]
+        ]);
+    }
+
+    public function userSearch($name) {
+        $users = User::where('name', 'like', $name . '%')->paginate();
+        return SuccessResponse::send('Users search', UsersListResource::collection($users), meta: [
+            'pagination' => [
+                'total' => $users->total(),
+                'current_page' => $users->currentPage(),
+                'per_page' => $users->perPage(),
+                'last_page' => $users->lastPage(),
             ]
         ]);
     }

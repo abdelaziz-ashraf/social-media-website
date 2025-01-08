@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\BadgeService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,5 +37,16 @@ class Post extends Model
 
     public function tags () {
         return $this->hasMany(PostTag::class);
+    }
+
+    protected static function booted() {
+        static::created(function ($post) {
+            (new \App\Services\BadgeService)->assignPostsBadges();
+        });
+    }
+
+    public function getBadgeServiceAttribute()
+    {
+        return new BadgeService();
     }
 }
