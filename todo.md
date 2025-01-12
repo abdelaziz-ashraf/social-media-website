@@ -6,7 +6,7 @@ The list of **API features** that can be implemented. The features include **use
 
 ### Eid TASKS 2: 
   - |x| cache
-  - | | create tags by #?_? in text (search text) => regex , in job , queue driver 
+  - |x| create tags by #?_? in text (search text) => regex , in job , queue driver 
   - | | auto complete when search about user. (min=2chars, ranking=popular show first, cache)
   - | | popular tags today
   - | | server side events (implement home page).

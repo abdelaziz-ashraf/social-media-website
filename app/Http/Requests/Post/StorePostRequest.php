@@ -37,8 +37,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'content' => 'required|string',
-            'group_id' => 'nullable|integer|exists:groups,id',
-            'tags' => 'nullable|array'
+            'group_id' => 'nullable|integer|exists:groups,id'
         ];
     }
 }

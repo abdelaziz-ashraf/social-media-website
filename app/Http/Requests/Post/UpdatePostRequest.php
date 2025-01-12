@@ -35,7 +35,6 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'content' => 'string',
-            'tags' => 'array'
         ];
     }
 }

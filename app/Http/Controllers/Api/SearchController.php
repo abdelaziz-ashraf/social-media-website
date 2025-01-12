@@ -6,10 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Post\PostResource;
 use App\Http\Resources\UsersListResource;
 use App\Http\Responses\SuccessResponse;
-use App\Models\Post;
-use App\Models\PostTag;
-use App\Models\Tag;
-use App\Models\User;
 use App\Services\SearchServices;
 
 class SearchController extends Controller

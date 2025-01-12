@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Responses\SuccessResponse;
+use App\Jobs\ProcessPostTags;
 use App\Models\GroupUser;
 use App\Models\Post;
 use App\Models\PostTag;
@@ -19,15 +20,7 @@ class PostService
             'group_id' => $data['group_id'] ?? null,
             'content' => $data['content'],
         ]);
-        if(isset($data['tags'])) {
-            foreach ($data['tags'] as $tag) {
-                $tag = Tag::firstOrCreate(['name' => $tag]);
-                PostTag::firstOrCreate([
-                    'post_id' => $post->id,
-                    'tag_id' => $tag->id,
-                ]);
-            }
-        }
+        ProcessPostTags::dispatch($post);
         return $post;
     }
 
@@ -35,15 +28,7 @@ class PostService
         $post->update([
             'content' => $data['content']
         ]);
-        if(isset($data['tags'])) {
-            foreach ($data['tags'] as $tag) {
-                $tag = Tag::firstOrCreate(['name' => $tag]);
-                PostTag::firstOrCreate([
-                    'post_id' => $post->id,
-                    'tag_id' => $tag->id,
-                ]);
-            }
-        }
+        ProcessPostTags::dispatch($post);
         return $post;
     }
 
