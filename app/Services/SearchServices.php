@@ -27,7 +27,9 @@ class SearchServices
 
     public function userSearchByName($name) {
         return Cache::remember("user_search_{$name}", 60 * 24, function() use ($name) {
-            return User::where('name', 'like', $name . '%')->paginate();
+            return User::where('name', 'like', $name . '%')
+                ->orderBy('number_of_followers', 'desc')
+                ->get();
         });
     }
 }

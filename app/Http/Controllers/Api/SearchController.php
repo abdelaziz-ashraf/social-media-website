@@ -7,6 +7,7 @@ use App\Http\Resources\Post\PostResource;
 use App\Http\Resources\UsersListResource;
 use App\Http\Responses\SuccessResponse;
 use App\Services\SearchServices;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
@@ -39,15 +40,11 @@ class SearchController extends Controller
         ]);
     }
 
-    public function userSearch($name) {
+    public function userSearch(Request $request) {
+        $name = $request->validate([
+            'name' => 'required|min:2',
+        ])['name'];
         $users = $this->searchService->userSearchByName($name);
-        return SuccessResponse::send('Users search', UsersListResource::collection($users), meta: [
-            'pagination' => [
-                'total' => $users->total(),
-                'current_page' => $users->currentPage(),
-                'per_page' => $users->perPage(),
-                'last_page' => $users->lastPage(),
-            ]
-        ]);
+        return SuccessResponse::send('Users search', UsersListResource::collection($users));
     }
 }

@@ -59,6 +59,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('search')->group(function () {
         Route::get('tags/{tag}', [SearchController::class, 'tagSearch']);
         Route::get('full-text/{text}', [SearchController::class, 'fullTextSearch']);
-        Route::get('users/{name}', [SearchController::class, 'userSearch']);
+        Route::get('users', [SearchController::class, 'userSearch']);
     });
 });
