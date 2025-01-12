@@ -12,6 +12,7 @@ use App\Http\Resources\User\Auth\LoggedUserResource;
 use App\Http\Resources\User\Auth\RegisteredUserResource;
 use App\Http\Responses\SuccessResponse;
 use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -25,19 +26,19 @@ class AuthController extends Controller
         UserRegisterRequest $request,
         GenerateUniqueUsername $generateUniqueUsername,
         GenerateVerificationCode $generateVerificationCode
-    ) {
+    ) : JsonResponse {
         $data = $request->validated();
         $user = $this->authService->register($data, $generateUniqueUsername, $generateVerificationCode);
         return SuccessResponse::send('User registered successfully, confirm your email to login (check your email).', RegisteredUserResource::make($user));
     }
 
-    public function verifyEmail(VerifyEmailRequest $request) {
+    public function verifyEmail(VerifyEmailRequest $request) : JsonResponse{
         $data = $request->validated();
         $this->authService->verifyEmail($data['email'], $data['code']);
         return SuccessResponse::send('Email verified successfully.');
     }
 
-    public function login(UserLoginRequest $request) {
+    public function login(UserLoginRequest $request) : JsonResponse {
         $userData = $request->validated();
         $user = $this->authService->login($userData->email, $userData->password);
         return SuccessResponse::send('User logged in successfully', LoggedUserResource::make($user));

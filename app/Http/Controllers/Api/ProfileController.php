@@ -10,10 +10,8 @@ use App\Http\Resources\User\Info\UserFollowingsResource;
 use App\Http\Resources\User\Info\UserProfileResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\User;
-use App\Notifications\NewFollowerNotification;
 use App\Services\UserService;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
@@ -22,21 +20,21 @@ class ProfileController extends Controller
         $this->userService = $userService;
     }
 
-    public function profile(User $user) {
+    public function profile(User $user) : JsonResponse {
         return SuccessResponse::send('User Profile', UserProfileResource::make($user));
     }
 
-    public function update(UpdateProfileRequest $request, GenerateUniqueUsername $generateUniqueUsername) {
+    public function update(UpdateProfileRequest $request, GenerateUniqueUsername $generateUniqueUsername) : JsonResponse {
         $user = $this->userService->update($request->validated(), $generateUniqueUsername);
         return SuccessResponse::send('User Profile Updated', UserProfileResource::make($user));
     }
 
-    public function follow(User $userToFollow) {
+    public function follow(User $userToFollow) : JsonResponse{
         $this->userService->followUser($userToFollow);
         return SuccessResponse::send('User Followed Successfully');
     }
 
-    public function unfollow(User $userToUnfollow) {
+    public function unfollow(User $userToUnfollow) : JsonResponse {
         $this->userService->unfollowUser($userToUnfollow);
         return SuccessResponse::send('User Unfollowed Successfully');
     }

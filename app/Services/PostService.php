@@ -6,15 +6,14 @@ use App\Http\Responses\SuccessResponse;
 use App\Jobs\ProcessPostTags;
 use App\Models\GroupUser;
 use App\Models\Post;
-use App\Models\PostTag;
-use App\Models\Tag;
+use App\Models\User;
 use App\Notifications\GroupAdminDeletedYourPostNotification;
 use App\Notifications\LikePostNotification;
 use Illuminate\Validation\UnauthorizedException;
 
 class PostService
 {
-    public function createPost($data) {
+    public function createPost(array $data) {
         $post = Post::create([
             'user_id' => auth()->id(),
             'group_id' => $data['group_id'] ?? null,
@@ -24,7 +23,7 @@ class PostService
         return $post;
     }
 
-    public function updatePost(Post $post, $data) {
+    public function updatePost(Post $post, array $data) {
         $post->update([
             'content' => $data['content']
         ]);
@@ -49,7 +48,7 @@ class PostService
         return SuccessResponse::send('Post deleted successfully!');
     }
 
-    public function toggleLikePost(Post $post, $user) {
+    public function toggleLikePost(Post $post, User $user) {
         if($post->likes()->where('user_id', $user->id)->exists()) {
             $post->likes()->where('user_id', $user->id)->first()->delete();
             return SuccessResponse::send('Post unliked successfully!');

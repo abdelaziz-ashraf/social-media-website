@@ -8,7 +8,7 @@ use Illuminate\Validation\UnauthorizedException;
 
 class CommentService
 {
-    public function createComment(Post $post, $content, $parent_id) {
+    public function createComment(Post $post, string $content, null|int $parent_id) : void {
         $post->comments()->create([
             'user_id' => auth()->id(),
             'content' => $content,
@@ -16,7 +16,7 @@ class CommentService
         ]);
     }
 
-    public function deleteComment(Comment $comment) {
+    public function deleteComment(Comment $comment) : void {
         if($comment->user_id != auth()->id()
             && $comment->post->user_id != auth()->id()
         ) {

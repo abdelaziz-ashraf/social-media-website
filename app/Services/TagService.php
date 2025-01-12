@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class TagService
 {
 
-    public function extractTags ($post) {
+    public function extractTags (Post $post) {
         preg_match_all('/#(\w+)/', $post['content'], $matches);
         $tags = $matches[1];
 

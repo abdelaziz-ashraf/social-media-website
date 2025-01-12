@@ -9,6 +9,7 @@ use App\Http\Resources\Post\PostDetailsResource;
 use App\Http\Responses\SuccessResponse;
 use App\Models\Post;
 use App\Services\PostService;
+use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
@@ -19,21 +20,21 @@ class PostController extends Controller
         $this->postService = $postService;
     }
 
-    public function store(StorePostRequest $request) {
+    public function store(StorePostRequest $request) : JsonResponse{
         $post = $this->postService->createPost($request->validated());
         return SuccessResponse::send('Post created successfully!', PostDetailsResource::make($post));
     }
-    public function show(Post $post) {
+    public function show(Post $post) : JsonResponse{
         return SuccessResponse::send('Post retrieved successfully!', PostDetailsResource::make($post));
     }
-    public function update(UpdatePostRequest $request, Post $post) {
+    public function update(UpdatePostRequest $request, Post $post) : JsonResponse {
         $post = $this->postService->updatePost($post, $request->validated());
         return SuccessResponse::send('Post updated successfully!', PostDetailsResource::make($post));
     }
-    public function destroy(Post $post) {
+    public function destroy(Post $post) : JsonResponse{
         return $this->postService->deletePost($post);
     }
-    public function toggleLike(Post $post) {
+    public function toggleLike(Post $post) : JsonResponse {
         return $this->postService->toggleLikePost($post, auth()->user());
     }
 }

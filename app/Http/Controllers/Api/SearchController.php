@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Post\PostResource;
-use App\Http\Resources\UsersListResource;
+use App\Http\Resources\User\UsersListResource;
 use App\Http\Responses\SuccessResponse;
 use App\Services\SearchServices;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -16,7 +17,7 @@ class SearchController extends Controller
         $this->searchService = $searchService;
     }
 
-    public function tagSearch ($tag) {
+    public function tagSearch ($tag) : JsonResponse {
         $posts = $this->searchService->searchByTag($tag);
         return SuccessResponse::send("Posts by tag {$tag}.", PostResource::collection($posts), meta: [
             'pagination' => [
@@ -28,7 +29,7 @@ class SearchController extends Controller
         ]);
     }
 
-    public function fullTextSearch ($text) {
+    public function fullTextSearch ($text) : JsonResponse{
         $posts = $this->searchService->fullTextPostSearch($text);
         return SuccessResponse::send("Posts search about {$text}.", PostResource::collection($posts), meta: [
             'pagination' => [
@@ -40,7 +41,7 @@ class SearchController extends Controller
         ]);
     }
 
-    public function userSearch(Request $request) {
+    public function userSearch(Request $request) : JsonResponse {
         $name = $request->validate([
             'name' => 'required|min:2',
         ])['name'];

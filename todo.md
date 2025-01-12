@@ -11,7 +11,7 @@ The list of **API features** that can be implemented. The features include **use
   - | | popular tags today
   - | | server side events (implement home page).
   - | | return type methods, attr types. declare(strict_types=1);
-  - | | assign badge .. job
+  - |x| assign badge .. job
 
 ---
 

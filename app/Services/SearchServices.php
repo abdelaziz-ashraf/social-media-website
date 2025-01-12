@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 class SearchServices
 {
 
-    public function searchByTag($tag) {
+    public function searchByTag(string $tag) {
         return Cache::remember("search_tag_{$tag}", 60 * 24, function() use ($tag) {
             $tagId = Tag::where('name', $tag)->pluck('id')->first();
             $postsIds = PostTag::where('tag_id', $tagId)->pluck('post_id')->toArray();
@@ -19,13 +19,13 @@ class SearchServices
         });
     }
 
-    public function fullTextPostSearch($text) {
+    public function fullTextPostSearch(string $text) {
         return Cache::remember("full_text_search_{$text}", 60 * 24, function() use ($text) {
             return Post::search($text)->paginate();
         });
     }
 
-    public function userSearchByName($name) {
+    public function userSearchByName(string $name) {
         return Cache::remember("user_search_{$name}", 60 * 24, function() use ($name) {
             return User::where('name', 'like', $name . '%')
                 ->orderBy('number_of_followers', 'desc')

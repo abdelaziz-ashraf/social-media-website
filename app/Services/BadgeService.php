@@ -6,7 +6,7 @@ use App\Models\Badge;
 
 class BadgeService
 {
-    public function assignPostsBadges()
+    public function assignPostsBadges() : void
     {
         $user = auth()->user();
         $numberOfPost = $user->posts()->count();

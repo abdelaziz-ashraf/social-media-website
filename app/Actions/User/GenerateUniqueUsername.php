@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class GenerateUniqueUsername {
 
-    public function __invoke($name)
+    public function __invoke(string $name) : string
     {
         $slug = Str::slug($name);
         return $slug . (User::where('username', $slug)->count() ?: '');

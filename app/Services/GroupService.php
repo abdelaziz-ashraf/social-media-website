@@ -21,7 +21,7 @@ class GroupService
         return Group::whereNotIn('id', $userGroupIds)->get();
     }
 
-    public function createGroup($data) {
+    public function createGroup(array $data) {
         return DB::transaction(function () use ($data) {
             $group = Group::create($data);
             GroupUser::create([
@@ -76,7 +76,7 @@ class GroupService
         $joinRequest->delete();
     }
 
-    private function canApproveRejectRequest($group_id, $user_id) {
+    private function canApproveRejectRequest(int $group_id, int $user_id) {
         $admin = GroupUser::where('group_id', request()->route('group')->id)
             ->whereIn('role', ['owner', 'admin'])->first();
         if(is_null($admin) || $admin->user_id !== auth()->id()) {
@@ -91,7 +91,7 @@ class GroupService
         return $joinRequest;
     }
 
-    public function updateAdminRole (Group $group, $user_id, $role) {
+    public function updateAdminRole (Group $group, int $user_id, string $role) {
         $owner = GroupUser::where('group_id', request()->route('group')->id)
             ->where('role', 'owner')->first();
         if(is_null($owner) || $owner->user_id !== auth()->id()) {

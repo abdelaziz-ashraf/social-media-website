@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Actions\User\GenerateUniqueUsername;
 use App\Models\User;
 use App\Notifications\NewFollowerNotification;
 use Illuminate\Support\Facades\Hash;
@@ -9,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class UserService
 {
-    public function update ($data, $generateUniqueUsername) {
+    public function update (array $data, GenerateUniqueUsername $generateUniqueUsername) : User {
         $user = auth()->user();
         if(isset($data['password'])) {
             $data['password'] = HASH::make($data['password']);
@@ -21,7 +22,7 @@ class UserService
         return $user;
     }
 
-    public function followUser($userToFollow) {
+    public function followUser(User $userToFollow) {
         $user = auth()->user();
         if($user->followings()->where('following_id', $userToFollow->id)->exists()) {
             throw ValidationException::withMessages(['Already Followed!']);
@@ -31,7 +32,7 @@ class UserService
     }
 
 
-    public function unfollowUser($userToUnfollow) {
+    public function unfollowUser(User $userToUnfollow) {
         $user = auth()->user();
         if(!$user->followings()->where('following_id', $userToUnfollow->id)->exists()) {
             throw ValidationException::withMessages(['Already Unfollowed!']);

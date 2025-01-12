@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace App\Services;
 
+use App\Actions\User\GenerateUniqueUsername;
+use App\Actions\User\GenerateVerificationCode;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Notifications\VerificationEmailCodeNotification;
@@ -10,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
-    public function login($email, $password) {
+    public function login(string $email, string $password) : User {
         $user = User::where('email', $email)->first();
         if(is_null($user->email_verified_at)) {
             throw ValidationException::withMessages([
@@ -26,7 +28,7 @@ class AuthService
         return $user;
     }
 
-    public function register($data, $generateUniqueUsername, $generateVerificationCode) {
+    public function register(array $data, GenerateUniqueUsername $generateUniqueUsername, GenerateVerificationCode $generateVerificationCode) : User {
         $data['password'] = Hash::make($data['password']);
         $data['username'] = $generateUniqueUsername($data['name']);
         $user = User::create($data);
@@ -34,7 +36,7 @@ class AuthService
         return $user;
     }
 
-    public function verifyEmail($email, $verificationCode) {
+    public function verifyEmail(string $email, string $verificationCode) : void {
         $user = User::where('email', $email)->first();
         if(!$user) {
             throw ValidationException::withMessages(['Check your data .. maybe email, code or both are not valid.']);

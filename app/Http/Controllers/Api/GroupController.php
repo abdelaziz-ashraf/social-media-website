@@ -12,6 +12,7 @@ use App\Http\Responses\SuccessResponse;
 use App\Models\Group;
 use App\Models\User;
 use App\Services\GroupService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -21,51 +22,51 @@ class GroupController extends Controller
         $this->groupService = $groupService;
     }
 
-    public function index() {
+    public function index() : JsonResponse {
         $groupsNotMember = $this->groupService->getGroups();
         return SuccessResponse::send('Groups', GroupResource::collection($groupsNotMember));
     }
 
-    public function show(Group $group) {
+    public function show(Group $group) : JsonResponse {
         return SuccessResponse::send('Group', GroupDetailsResource::make($group));
     }
 
-    public function members(Group $group) {
+    public function members(Group $group) : JsonResponse{
         $groupMembers = $group->users()->get();
         return SuccessResponse::send('Members', GroupUsersResource::collection($groupMembers));
     }
 
-    public function store(StoreGroupRequest $request) {
+    public function store(StoreGroupRequest $request) : JsonResponse {
         $group = $this->groupService->createGroup($request->validated());
         return SuccessResponse::send('Group Created Successfully', GroupResource::make($group));
     }
 
-    public function update(UpdateGroupRequest $request, Group $group) {
+    public function update(UpdateGroupRequest $request, Group $group) : JsonResponse {
         $group->update($request->validated());
         return SuccessResponse::send('Group Updated Successfully', GroupResource::make($group));
     }
 
-    public function destroy(Group $group) {
+    public function destroy(Group $group) : JsonResponse{
         $this->groupService->deleteGroup($group);
         return SuccessResponse::send('Group Deleted Successfully');
     }
 
-    public function join(Group $group) {
+    public function join(Group $group) : JsonResponse{
         $this->groupService->joinGroup($group);
         return SuccessResponse::send('Group Joined Successfully');
     }
 
-    public function approveRequest(Group $group, User $user) {
+    public function approveRequest(Group $group, User $user) : JsonResponse{
         $this->groupService->approveJoinRequest($group, $user);
         return SuccessResponse::send('Request Approved Successfully');
     }
 
-    public function rejectRequest(Group $group, User $user) {
+    public function rejectRequest(Group $group, User $user) : JsonResponse{
         $this->groupService->rejectJoinRequest($group, $user);
         return SuccessResponse::send('Request Rejected Successfully');
     }
 
-    public function updateAdminRole(Request $request, Group $group, $userId) {
+    public function updateAdminRole(Request $request, Group $group, $userId) : JsonResponse{
         $groupUser = $this->groupService->updateAdminRole($group, $userId, $request->input('role'));
         return SuccessResponse::send('Role Updated Successfully', GroupUsersResource::make($groupUser));
     }
