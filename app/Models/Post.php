@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Services\BadgeService;
+use App\Jobs\ProcessAssignBadge;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,12 +41,7 @@ class Post extends Model
 
     protected static function booted() {
         static::created(function ($post) {
-            (new \App\Services\BadgeService)->assignPostsBadges();
+            ProcessAssignBadge::dispatch();
         });
-    }
-
-    public function getBadgeServiceAttribute()
-    {
-        return new BadgeService();
     }
 }
