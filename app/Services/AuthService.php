@@ -1,9 +1,7 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Services;
 
-use App\Actions\User\GenerateUniqueUsername;
-use App\Actions\User\GenerateVerificationCode;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Notifications\VerificationEmailCodeNotification;

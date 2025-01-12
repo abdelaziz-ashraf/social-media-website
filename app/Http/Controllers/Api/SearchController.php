@@ -10,13 +10,17 @@ use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Tag;
 use App\Models\User;
+use App\Services\SearchServices;
 
 class SearchController extends Controller
 {
+    protected $searchService;
+    public function __construct(SearchServices $searchService) {
+        $this->searchService = $searchService;
+    }
+
     public function tagSearch ($tag) {
-        $tagId = Tag::where('name', $tag)->pluck('id')->first();
-        $postsIds = PostTag::where('tag_id', $tagId)->pluck('post_id')->toArray();
-        $posts = Post::whereIn('id', $postsIds)->paginate();
+        $posts = $this->searchService->searchByTag($tag);
         return SuccessResponse::send("Posts by tag {$tag}.", PostResource::collection($posts), meta: [
             'pagination' => [
                 'total' => $posts->total(),
@@ -28,7 +32,7 @@ class SearchController extends Controller
     }
 
     public function fullTextSearch ($text) {
-        $posts = Post::search($text)->paginate();
+        $posts = $this->searchService->fullTextPostSearch($text);
         return SuccessResponse::send("Posts search about {$text}.", PostResource::collection($posts), meta: [
             'pagination' => [
                 'total' => $posts->total(),
@@ -40,7 +44,7 @@ class SearchController extends Controller
     }
 
     public function userSearch($name) {
-        $users = User::where('name', 'like', $name . '%')->paginate();
+        $users = $this->searchService->userSearchByName($name);
         return SuccessResponse::send('Users search', UsersListResource::collection($users), meta: [
             'pagination' => [
                 'total' => $users->total(),

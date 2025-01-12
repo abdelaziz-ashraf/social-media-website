@@ -13,7 +13,7 @@ class BadgeService
         if ($numberOfPost < 10) {
             return;
         }
-        $log10NumberOfPosts = log10($user->posts()->count());
+        $log10NumberOfPosts = log10($numberOfPost);
 
         if(is_int($log10NumberOfPosts)  || floor($log10NumberOfPosts) == $log10NumberOfPosts)  {
             $badge = Badge::firstOrCreate(

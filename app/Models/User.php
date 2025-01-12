@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -71,8 +72,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Group::class, 'group_users', 'user_id', 'group_id');
     }
 
-    public function badges()
+    public function badges() : BelongsToMany
     {
-        return $this->belongsToMany(Badge::class, 'user_badge');
+        return $this->belongsToMany(Badge::class, 'user_badge', 'user_id', 'badge_id');
     }
 }
