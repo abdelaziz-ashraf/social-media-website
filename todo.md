@@ -8,14 +8,12 @@ The list of **API features** that can be implemented. The features include **use
   - |x| cache
   - |x| create tags by #?_? in text (search text) => regex , in job , queue driver 
   - |x| auto complete when search about user. (min=2chars, ranking=popular show first, cache)
-  - | | popular tags today
+  - |x| popular used tags today.
   - | | server side events (implement home page).
-  - | | return type methods, attr types. declare(strict_types=1);
-  - |x| assign badge .. job
+  - |x| return type methods, attr types.
+  - |x| assign badge => job
 
 ---
-
-- | | use php-stan.
 
 ### Eid Code Review: TASKS 1: `Done`
   - |x| Create Services and use in controllers.
@@ -70,8 +68,6 @@ The list of **API features** that can be implemented. The features include **use
   - |x| Content Filtering (by popularity = sort by likes and comments).
 - |x| Full-Text Search for posts: using Scout.
 
-- try: Implement fuzzy search and rank search results based on relevance
-
 ---
 
 ### Advanced User Interaction `(Done)`
@@ -80,19 +76,18 @@ The list of **API features** that can be implemented. The features include **use
 ---
 
 ### Profile Avatar Management
-  - use: AWS S3.
-  - update.
-  - delete.
+  - | | use: AWS S3.
+  - | | update.
+  - | | delete.
 
 ---
 
 ### Enhanced Notification System
-  - Allow users to subscribe to specific types of notifications (e.g., follow notifications, group notifications). `POST /api/notifications/subscribe`
-= Subscriber Observer Design Pattern
+  - | | Allow users to subscribe to another post notifications. `POST /api/notifications/subscribe`
 
 ---
 
-### Social Graph Analysis `skip`
+### Social Graph Analysis `in future`
 
 - Social Graph API
     - API Endpoint: `GET /api/users/{user_id}/social-graph`
@@ -105,7 +100,7 @@ The list of **API features** that can be implemented. The features include **use
 
 ---
 
-### Media & Attachments `Skip`
+### Media & Attachments `in future`
 
 - Advanced Video Handling (Streaming)
     - `GET /api/posts/{post_id}/video-stream`

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -61,4 +62,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('full-text/{text}', [SearchController::class, 'fullTextSearch']);
         Route::get('users', [SearchController::class, 'userSearch']);
     });
+
+    Route::get('tags/popular-today', [TagController::class, 'popularToday']);
 });

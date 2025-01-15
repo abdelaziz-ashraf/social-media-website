@@ -14,4 +14,8 @@ class Tag extends Model
     public function postTag() {
         return $this->hasOne(PostTag::class);
     }
+
+    public function TagTime() {
+        return $this->hasOne(TagsTime::class);
+    }
 }
