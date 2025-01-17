@@ -6,6 +6,7 @@ use App\Http\Responses\SuccessResponse;
 use App\Jobs\ProcessPostTags;
 use App\Models\GroupUser;
 use App\Models\Post;
+use App\Models\PostNotificationsSubscription;
 use App\Models\User;
 use App\Notifications\GroupAdminDeletedYourPostNotification;
 use App\Notifications\LikePostNotification;
@@ -58,5 +59,16 @@ class PostService
         ]);
         $user->notify(new LikePostNotification());
         return SuccessResponse::send('Post liked successfully!');
+    }
+
+    public function postNotificationsSubscription(Post $post) : string {
+        if ($post->postNotificationsSubscriptions()->where('user_id', auth()->id())->exists()) {
+            $post->postNotificationsSubscriptions()->where('user_id', auth()->id())->delete();
+            return 'Notifications post turned off';
+        }
+        $post->postNotificationsSubscriptions()->create([
+            'user_id' => auth()->id(),
+        ]);
+        return 'Notifications post turned on';
     }
 }

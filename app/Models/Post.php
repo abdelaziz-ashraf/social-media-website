@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Jobs\ProcessAssignBadge;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
@@ -43,5 +44,8 @@ class Post extends Model
         static::created(function ($post) {
             ProcessAssignBadge::dispatch();
         });
+    }
+    public function postNotificationsSubscriptions () :HasMany {
+        return $this->hasMany(PostNotificationsSubscription::class);
     }
 }

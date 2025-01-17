@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\CommentNotification;
 use Illuminate\Validation\UnauthorizedException;
 
 class CommentService
@@ -14,6 +15,10 @@ class CommentService
             'content' => $content,
             'parent_id' => $parent_id,
         ]);
+        $post->user->notify(new CommentNotification());
+        foreach($post->postNotificationsSubscriptions as $subscription) {
+            $subscription->user->notify(new CommentNotification());
+        }
     }
 
     public function deleteComment(Comment $comment) : void {

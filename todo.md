@@ -82,7 +82,7 @@ The list of **API features** that can be implemented. The features include **use
 ---
 
 ### Enhanced Notification System
-  - | | Allow users to subscribe to another post notifications.
+  - |x| Allow users to subscribe to another post notifications.
 
 ---
 
