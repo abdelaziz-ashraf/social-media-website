@@ -6,6 +6,7 @@ use App\Actions\User\GenerateUniqueUsername;
 use App\Models\User;
 use App\Notifications\NewFollowerNotification;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class UserService
@@ -38,5 +39,19 @@ class UserService
             throw ValidationException::withMessages(['Already Unfollowed!']);
         }
         $user->followings()->detach($userToUnfollow);
+    }
+
+    public function uploadAvatar($avatar) {
+        $fileName = 'avatars/' . uniqid() . $avatar->getClientOriginalExtension();
+        Storage::disk('backblaze')->put($fileName, file_get_contents($avatar));
+
+        $user = auth()->user();
+        if ($user->avatar) {
+            Storage::disk('backblaze')->delete($user->avatar);
+        }
+        $user->avatar = $fileName;
+        $user->save();
+
+        return $user;
     }
 }

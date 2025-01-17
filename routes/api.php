@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('followers', [ProfileController::class, 'followers']);
         Route::get('followings', [ProfileController::class, 'followings']);
     });
+    Route::post('users/profile/upload-avatar', [ProfileController::class, 'uploadAvatar']);
 
     Route::post('users/{userToFollow}/follow', [ProfileController::class, 'follow']);
     Route::post('users/{userToUnfollow}/unfollow', [ProfileController::class, 'unfollow']);

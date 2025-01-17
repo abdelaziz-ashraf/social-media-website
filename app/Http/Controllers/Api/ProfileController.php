@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\User\GenerateUniqueUsername;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Profile\UpdateProfileRequest;
+use App\Http\Requests\User\UploadAvatarRequest;
 use App\Http\Resources\User\Info\UserFollowersResource;
 use App\Http\Resources\User\Info\UserFollowingsResource;
 use App\Http\Resources\User\Info\UserProfileResource;
@@ -49,4 +50,9 @@ class ProfileController extends Controller
         return SuccessResponse::send('User Followers', UserFollowersResource::collection($followers));
     }
 
+    public function uploadAvatar(UploadAvatarRequest $request) {
+        $avatar = $request->validated('avatar');
+        $user = $this->userService->uploadAvatar($avatar);
+        return SuccessResponse::send('User Profile Updated', UserProfileResource::make($user));
+    }
 }

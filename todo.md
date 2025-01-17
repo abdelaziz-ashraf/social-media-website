@@ -77,13 +77,12 @@ The list of **API features** that can be implemented. The features include **use
 
 ### Profile Avatar Management
   - | | use: AWS S3.
-  - | | update.
-  - | | delete.
+  - | | upload avatar 
 
 ---
 
 ### Enhanced Notification System
-  - | | Allow users to subscribe to another post notifications. `POST /api/notifications/subscribe`
+  - | | Allow users to subscribe to another post notifications.
 
 ---
 
